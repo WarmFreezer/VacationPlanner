@@ -1,16 +1,14 @@
-from flask import Flask
+import streamlit as st
+import plotly as py
 
-app = Flask(__name__)
+# creating a header text 
+st.header('st.button')
 
-@app.route('/')
-def home():
-    return "Hello world"
+# using conditional statements if and else for printing alternative messages
+# the button() command accepts the label input 
+if st.button('Say hello'):
 
-@app.route('/dad')
-def dad():
-   # Render the page
-   return "Hello Dad!"
-
-if __name__ == '__main__':
-   # Run the app server on localhost:4449
-   app.run('localhost', 4449)
+    # write() command is used to write text in the app
+    st.write('Hello, hi there')
+else:
+    st.write('Goodbye')
