@@ -6,9 +6,7 @@ class FlightScraper:
     destination: str
     d_date: str
     r_date: str
-    budget: float
     fliers: int
-    rental: bool
 
     #Flight information to collect
     SELECTORS = {
