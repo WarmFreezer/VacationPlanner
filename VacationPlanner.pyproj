@@ -29,6 +29,9 @@
   <ItemGroup>
     <Compile Include="app.py" />
     <Compile Include="Scrape.py" />
+    <Compile Include="FlightScraper.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Trip.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />
