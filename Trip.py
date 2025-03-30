@@ -1,5 +1,5 @@
 class Trip:
-    def __init__(self, housingData, flightData1, flightData2, eventCost, foodCost, additionalCosts, services, images):
+    def __init__(self, housingData, flightData1, flightData2, eventCost, foodCost, additionalCosts, percentBudget, services, images):
         self.housingData = housingData
         self.flightData1 = flightData1
         self.flightData2 = flightData2
