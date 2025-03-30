@@ -28,6 +28,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="app.py" />
+    <Compile Include="FlightData.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Scrape.py" />
     <Compile Include="FlightScraper.py">
       <SubType>Code</SubType>
