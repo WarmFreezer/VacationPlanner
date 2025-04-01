@@ -31,10 +31,10 @@
     <Compile Include="FlightData.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="HousingData.py">
+    <Compile Include="VacationData.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WebScapeAI.py" />
+    <Compile Include="WebSearchAI.py" />
     <Compile Include="FlightScraper.py">
       <SubType>Code</SubType>
     </Compile>

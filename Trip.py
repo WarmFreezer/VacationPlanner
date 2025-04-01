@@ -1,21 +1,11 @@
 class Trip:
-    def __init__(self, housingData, flightData1, flightData2, eventCost, foodCost, additionalCosts, percentBudget, services, images):
-        self.housingData = housingData
+    def __init__(self, vacation, flightData1, flightData2, eventCost, foodCost, additionalCosts, percentBudget, services, images):
+        self.vacationData = vacationData
         self.flightData1 = flightData1
         self.flightData2 = flightData2
-        self.eventCost = eventCost #Stores the cost of the main event on the itenerary
-        self.foodCost = foodCost #Stores the cost of food for the trip
-        self.additionalCosts = additionalCosts #Stores additional costs
-        self.percentBudget = percentBudget #Stores the percentage of budget used for housing
-        self.services = services #Stores the services available
         rating = services.__sizeof__()
-        self.images = images #Stores images for the trip object
 
-    def __init__(self, housingData, flightData1, flightData2, eventCost, foodCost, additionalCosts):
-        self.housingData = housingData
+    def __init__(self, vacationData, flightData1, flightData2, eventCost, foodCost, additionalCosts):
+        self.vacationData = vacationData
         self.flightData1 = flightData1
         self.flightData2 = flightData2
-        self.eventCost = eventCost #Stores the cost of the main event on the itenerary
-        self.foodCost = foodCost #Stores the cost of food for the trip
-        self.additionalCosts = additionalCosts #Stores additional costs
-        
