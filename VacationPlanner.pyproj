@@ -31,6 +31,9 @@
     <Compile Include="FlightData.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HousingData.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="WebScapeAI.py" />
     <Compile Include="FlightScraper.py">
       <SubType>Code</SubType>
