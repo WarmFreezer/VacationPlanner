@@ -17,6 +17,7 @@
     <Name>VacationPlanner</Name>
     <RootNamespace>VacationPlanner</RootNamespace>
     <WebBrowserPort>4449</WebBrowserPort>
+    <TestFramework>Pytest</TestFramework>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,6 +30,9 @@
   <ItemGroup>
     <Compile Include="app.py" />
     <Compile Include="Scrape.py" />
+    <Compile Include="test_ui.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Trip.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.Web.targets" />
