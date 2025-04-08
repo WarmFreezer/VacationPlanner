@@ -1,4 +1,4 @@
-class VacationData: #Objects of this type store the data for a housing object
+class VacationData: #Objects of this type store the data for a vacation object
     percentBudget = 0 #Stores the percentage of the budget allocated to housing
     
     def __init__(self, housing, housingCost, eventCost, foodCost, additionalCosts, itineraryDescription):
@@ -22,7 +22,6 @@ class VacationData: #Objects of this type store the data for a housing object
         self.itineraryDescription = itineraryDescription
         self.services = services
         self.images = images
-        
 
     def CalcPercentBudget(budget):
         percentBudget = housingCost/budget

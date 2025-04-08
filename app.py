@@ -1,4 +1,7 @@
 
+
+
+
 import streamlit as st
 from urllib3 import add_stderr_logger
 import plotly as py
@@ -6,10 +9,9 @@ import pandas as pd
 import numpy as np
 import altair as alt
 
-from datetime import time, datetime
 
 st.header('Creating a UI')
-st.write('This is not out UI finle design')
+st.write('This is not our UI finle design')
 st.write('Creating place holder for UI')
 
 
@@ -22,7 +24,6 @@ add_selectbox = st.sidebar.selectbox(
 
 
 )
-
 
 # Using "with" notation
 with st.sidebar:
