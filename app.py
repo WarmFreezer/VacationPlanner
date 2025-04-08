@@ -1,15 +1,12 @@
-
-
-
-
 import streamlit as st
 import plotly as py
 import pandas as pd
 import numpy as np
 import altair as alt
 
+
 st.header('Creating a UI')
-st.write('This is not out UI finle design')
+st.write('This is not our UI finle design')
 st.write('Creating place holder for UI')
 
 st.write('Hello, *World!* :vacation mode:')
@@ -36,13 +33,13 @@ add_selectbox = st.sidebar.selectbox(
     ("Example 1", "Example 2", "Example 3")
 )
 
-
 # Using "with" notation
 with st.sidebar:
     add_radio = st.radio(
         "Choose a shipping method",
         ("Standard (5-15 days)", "Express (2-5 days)")
     )
+
 
 #---App Functions Separate from UI Below---#
 budget
@@ -52,7 +49,6 @@ d_date
 r_date
 vacationers
 rental
-
 
 flightData #List for departing flights which need to be passed to WebSearchAI to find an itinerary on the destination city (Odd indexes should be departing flights)
 vacationData #List for vacation info which will be combined with flightData to creat a list of trip objects
