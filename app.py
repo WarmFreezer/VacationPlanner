@@ -1,13 +1,14 @@
-
-
-
-
+#External libraries here
 import streamlit as st
 from urllib3 import add_stderr_logger
 import plotly as py
 import pandas as pd
 import numpy as np
 import altair as alt
+
+#Internal libraries here
+import WebSearchAI
+import FlightScraper
 
 
 st.header('Creating a UI')
@@ -80,14 +81,20 @@ st.map(df, latitude="col1", longitude="col2", size="col3", color="col4")
 
 """
 #---App Functions Separate from UI Below---#
-budget
-departure
-destinationState
-d_date
-r_date
-vacationers
-rental
+#budget 
+#departure
+destinationState = "Kentucky"
+d_date = "2025-05-09"
+r_date = "2025-05-16"
+vacationers = "2"
+#rental
 
+housingUrl = "www.airbnb.com/s/" + destinationState + "/homes?refinement_paths%5B%5D=%2Fhomes&flexible_trip_lengths%5B%5D=one_week&monthly_start_date=" + d_date + "&monthly_length=3&monthly_end_date=" + r_date + "&price_filter_input_type=0&channel=EXPLORE&date_picker_type=calendar&checkin=" + d_date + "&checkout=" + r_date + "&adults=5"
+housingPrompt = "Fetch the address and cost of housing"
+
+searchVacations = WebSearchAI.SearchWeb(housingUrl, housingPrompt)
+
+"""
 flightData #List for departing flights which need to be passed to WebSearchAI to find an itinerary on the destination city (Odd indexes should be departing flights)
 vacationData #List for vacation info which will be combined with flightData to creat a list of trip objects
 tripList #Will need to define a new object based on all departing flights, not returning ones
