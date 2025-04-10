@@ -1,9 +1,12 @@
+
+from scrapegraphai.graphs import SmartScraperGraph
+import streamlit as st
 import VacationData
 
 #class WebSearchAI:        
 def SearchWeb(url, prompt):
     graph_config = {
-        "lim": {
+        "llm": {
             "model": "ollama/llama3",
             "temperature": 0, 
             "format": "json", 
@@ -25,6 +28,3 @@ def SearchWeb(url, prompt):
     results = smart_scraper_graph.run()
     st.write(results)
         
-    def SearchWeb():
-        print("Unfinished - SearchWeb()")
-        #Must create VacationData objects from the AI output
