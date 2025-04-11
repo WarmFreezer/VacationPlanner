@@ -1,8 +1,15 @@
 ﻿import streamlit as st
 import json
+import TripManager
+
+import os
+st.write(os.listdir())
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(base_dir, "trips.json")
 
 # Load your JSON data
-with open('trips.json') as f:
+with open(file_path, 'r') as f:
     data = json.load(f)
 
 # Main app title
