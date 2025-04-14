@@ -1,7 +1,6 @@
 ﻿import streamlit as st
 import json
 import TripManager
-
 import os
 st.write(os.listdir())
 
