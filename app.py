@@ -84,3 +84,4 @@ rental
                 st.write(f"• **{food['type']}** — {food['name']} — {food['estimated_price_per_meal']}")
     else:
         st.info("No food options selected.")
+"""

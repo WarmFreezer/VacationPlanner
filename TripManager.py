@@ -38,24 +38,27 @@ class TripManager:
         housingUrl = "https://www.vacasa.com/search?adults=" + str(self.vacationers) + "&arrival=04%2F20%2F2025&departure=04%2F26%2F2025&place=/usa/" + self.destinationState + "/" + self.destinationCity + "/"
 
         search = WebSearchAI(housingUrl)
-        prices = search.getPrices()
-        names = search.getNames()
+        housingPrices = search.getPrices()
+        housingNames = search.getNames()
 
+        #Iterates through the price and names list to create VacationData objects
         index = 0
-        while(index < len(prices)):
-            self.vacationData.append(VacationData(names[i], prices[i], 100, 100, 100, "Iten Descr"))
-            self.flightData.append(FlightData("Spirit", self.destinationState, "05-16-2025", 100))
-            self.flightData.append(FlightData("Spirit", self.destinationState, "05-16-2025", 100))
+        while(index < len(housingPrices)):
+            self.vacationData.append(VacationData(housingNames[i], housingPrices[i], 100, 100, 100, "Iten Descr"))
+            self.flightData.append(FlightData("Spirit", self.destinationState, "05-16-2025", 100)) #remove
+            self.flightData.append(FlightData("Spirit", self.destinationState, "05-16-2025", 100)) #remove
             index += 1
 
-        for i in prices:
-            st.write(i)
-        for i in names:
-            st.write(i)
+        
+#        for i in prices:
+ #           st.write(i)
+  #      for i in names:
+   #         st.write(i)
 
+        #Iterates through the vacationData and flight lists to create Trip objects
         index = 0
         while (index < len(self.vacationData)):
-            self.tripList.append(Trip(self.vacationData[i], self.flightData[i], self.flightData[i+1]))
+            self.tripList.append(Trip(self.vacationData[i], self.flightData[index], self.flightData[index+1]))
             index += 1
 
         return self.tripList
