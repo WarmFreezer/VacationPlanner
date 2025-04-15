@@ -1,8 +1,8 @@
-
+﻿
 import streamlit as st
 
 # --- Page Title ---
-st.title("?? Vacation Budget Planner")
+st.title(" Vacation Budget Planner")
 
 # --- Sidebar: Budget Setup ---
 st.sidebar.header("1. Budget Setup")
@@ -15,7 +15,7 @@ try:
     total_budget = float(budget_input) if budget_input else 0.0
 except ValueError:
     total_budget = 0.0
-    st.sidebar.error("? Please enter a valid number for the budget.")
+    st.sidebar.error("❗ Please enter a valid number for the budget.")
 
 # Initialize remaining percentage
 remaining_percentage = 100.0
@@ -48,11 +48,11 @@ if total_budget > 0:
         st.header("Budget Allocation Summary")
 
         if total_pct > 100:
-            st.error(f"? You allocated {total_pct:.1f}%, which is more than 100%. Please adjust.")
+            st.error(f"❗ You allocated {total_pct:.1f}%, which is more than 100%. Please adjust.")
         elif total_pct < 100:
-            st.error(f"? You allocated {total_pct:.1f}%, which is less than 100%. Please adjust.")
+            st.error(f"❗ You allocated {total_pct:.1f}%, which is less than 100%. Please adjust.")
         else:
-            st.success("? Budget allocations are valid!")
+            st.success("✅ Budget allocations are valid!")
 
             # Calculate dollar amounts
             food_amt = (food_pct / 100) * total_budget
@@ -63,8 +63,8 @@ if total_budget > 0:
 
             # --- Main page: Show the calculated budget
             st.subheader("Your Budget Allocation Summary:")
-            st.write(f"?? Food: ${food_amt:.2f} ({food_pct:.1f}%)")
-            st.write(f"?? Lodging: ${lodging_amt:.2f} ({lodging_pct:.1f}%)")
-            st.write(f"?? Entertainment: ${entertainment_amt:.2f} ({entertainment_pct:.1f}%)")
-            st.write(f"?? Airfare: ${airfare_amt:.2f} ({airfare_pct:.1f}%)")
-            st.write(f"??? Spending Money: ${spending_amt:.2f} ({spending_pct:.1f}%)")
+            st.write(f" Food: ${food_amt:.2f} ({food_pct:.1f}%)")
+            st.write(f" Lodging: ${lodging_amt:.2f} ({lodging_pct:.1f}%)")
+            st.write(f" Entertainment: ${entertainment_amt:.2f} ({entertainment_pct:.1f}%)")
+            st.write(f" Airfare: ${airfare_amt:.2f} ({airfare_pct:.1f}%)")
+            st.write(f" Spending Money: ${spending_amt:.2f} ({spending_pct:.1f}%)")
