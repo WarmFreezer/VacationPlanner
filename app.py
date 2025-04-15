@@ -1,86 +1,69 @@
+﻿import streamlit as st
+import json
+import TripManager
+import os
+st.write(os.listdir())
 
+base_dir = os.path.dirname(os.path.abspath(__file__))
+file_path = os.path.join(base_dir, "trips.json")
 
+# Load your JSON data
+with open(file_path, 'r') as f:
+    data = json.load(f)
 
+# Main app title
+st.title("🧳 Budget Trip Planner")
 
-import streamlit as st
-from urllib3 import add_stderr_logger
-import plotly as py
-import pandas as pd
-import numpy as np
-import altair as alt
+# Sidebar for selecting the destination
+st.sidebar.header("Plan Your Trip")
+location_names = [place["location"] for place in data]
+selected_location = st.sidebar.selectbox("Choose a destination:", location_names)
 
+# Find the selected location details
+selected_place = next((place for place in data if place["location"] == selected_location), None)
 
-st.header('Creating a UI')
-st.write('This is not our UI finle design')
-st.write('Creating place holder for UI')
+# Show selections
+if selected_place:
+    st.sidebar.subheader("Choose Amenities")
+    amenity_options = [a["name"] for a in selected_place["amenities"]]
+    selected_amenities = st.sidebar.multiselect("Select amenities:", amenity_options)
 
+    st.sidebar.subheader("Choose Entertainment")
+    entertainment_options = [e["name"] for e in selected_place["entertainment"]]
+    selected_entertainment = st.sidebar.multiselect("Select entertainment:", entertainment_options)
 
+    st.sidebar.subheader("Choose Places to Stay")
+    stay_options = [s["name"] for s in selected_place["places_to_stay"]]
+    selected_stays = st.sidebar.multiselect("Select places to stay:", stay_options)
 
-# creating a side bar
-add_selectbox = st.sidebar.selectbox(
-    "Where would you like to travel to",
-    ("Example 1", "Example 2", "Example 3")
+    st.sidebar.subheader("Choose Food Options")
+    food_options = [f["name"] for f in selected_place["food"]]
+    selected_food = st.sidebar.multiselect("Select food options:", food_options)
 
+    # Main Page Output
+    st.header(f"Trip Details for {selected_place['location']}, {selected_place['city']}, {selected_place['state']}")
 
+    # 🛝 Show selected amenities (no expander!)
+    st.subheader("🛝 Selected Amenities")
+    if selected_amenities:
+        for amenity in selected_place["amenities"]:
+            if amenity["name"] in selected_amenities:
+                st.write(f"• **{amenity['name']}** — {amenity['estimated_price']}")
+    else:
+        st.info("No amenities selected.")
 
-)
-
-# Using "with" notation
-with st.sidebar:
-    add_radio = st.radio(
-        "Choose a shipping method",
-        ("Standard (5-15 days)", "Express (2-5 days)")
-    )
-
-
-# adding a slide bar
-# Example 1
-st.header('st.slider')
-
-# Example 1
-
-st.subheader('Slider')
-
-age = st.slider('How old are you?', 0, 130, 25)
-st.write("I'm ", age, 'years old')
-
-
-
-st.header('Services:')
-
-option = st.selectbox(
-     'Select the service you want',
-     ('Service 1', 'Service 2', 'Service 3'))
-
-st.write('You chose the following service ', option)
-
-
-st.header('multiselect')
-
-options = st.multiselect(
-     'What are your top choices',
-     ['Green', 'Yellow', 'Red', 'Blue'],
-     ['Yellow', 'Red'])
-
-st.write('You selected:', options)
-
-
-# map 
-df = pd.DataFrame(
-    {
-        "col1": np.random.randn(1000) / 50 + 37.76,
-        "col2": np.random.randn(1000) / 50 + -122.4,
-        "col3": np.random.randn(1000) * 100,
-        "col4": np.random.rand(1000, 4).tolist(),
-    }
-)
-
-st.map(df, latitude="col1", longitude="col2", size="col3", color="col4")
-
+    # 🎭 Show selected entertainment
+    st.subheader("🎭 Selected Entertainment")
+    if selected_entertainment:
+        for entertainment in selected_place["entertainment"]:
+            if entertainment["name"] in selected_entertainment:
+                st.write(f"• **{entertainment['name']}** — {entertainment['estimated_price']}")
+    else:
+        st.info("No entertainment selected.")
 
 """
 #---App Functions Separate from UI Below---#
-budget 
+budget
 departure
 destinationState
 d_date
@@ -88,7 +71,11 @@ r_date
 vacationers
 rental
 
-flightData #List for departing flights which need to be passed to WebSearchAI to find an itinerary on the destination city (Odd indexes should be departing flights)
-vacationData #List for vacation info which will be combined with flightData to creat a list of trip objects
-tripList #Will need to define a new object based on all departing flights, not returning ones
-"""
+    # 🍔 Show selected food options
+    st.subheader("🍔 Selected Food Options")
+    if selected_food:
+        for food in selected_place["food"]:
+            if food["name"] in selected_food:
+                st.write(f"• **{food['type']}** — {food['name']} — {food['estimated_price_per_meal']}")
+    else:
+        st.info("No food options selected.")
