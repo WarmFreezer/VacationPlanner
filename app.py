@@ -80,7 +80,7 @@ st.map(df, latitude="col1", longitude="col2", size="col3", color="col4")
 
 """
 #---App Functions Separate from UI Below---#
-budget
+budget 
 departure
 destinationState
 d_date
