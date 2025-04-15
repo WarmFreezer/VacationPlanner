@@ -66,14 +66,15 @@ if selected_place:
     else:
         st.info("No entertainment selected.")
 
-    # 🏨 Show selected places to stay
-    st.subheader("🏨 Selected Places to Stay")
-    if selected_stays:
-        for stay in selected_place["places_to_stay"]:
-            if stay["name"] in selected_stays:
-                st.write(f"• **{stay['type']}** — {stay['name']} — {stay['estimated_price_per_night']}")
-    else:
-        st.info("No places to stay selected.")
+"""
+#---App Functions Separate from UI Below---#
+budget
+departure
+destinationState
+d_date
+r_date
+vacationers
+rental
 
     # 🍔 Show selected food options
     st.subheader("🍔 Selected Food Options")
