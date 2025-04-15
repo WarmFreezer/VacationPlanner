@@ -1,11 +1,16 @@
-﻿import streamlit as st
+﻿#Internal libraries here
+from TripManager import TripManager
+
+#External libraries here
+import streamlit as st
 import json
-import TripManager
 import os
-st.write(os.listdir())
 
 base_dir = os.path.dirname(os.path.abspath(__file__))
 file_path = os.path.join(base_dir, "trips.json")
+
+tripManager = TripManager(10000, "Departure", "Florida", "Miami", "05-16-2025", "05-23-2025", 2)
+trips = tripManager.MainSearch() #Stores all trips returned from main search
 
 # Load your JSON data
 with open(file_path, 'r') as f:

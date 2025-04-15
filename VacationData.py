@@ -1,3 +1,5 @@
+#By: Thomas Eubank
+#Designed to store data for a vacation, not the travel costs
 class VacationData: #Objects of this type store the data for a vacation object
     percentBudget = 0 #Stores the percentage of the budget allocated to housing
     
