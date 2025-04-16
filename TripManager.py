@@ -49,7 +49,7 @@ class TripManager:
         housingUrl = "https://www.vacasa.com/search?adults=" + str(self.vacationers) + "&arrival=04%2F20%2F2025&departure=04%2F26%2F2025&place=/usa/" + self.destinationState + "/" + self.destinationCity + "/"
 
         search = WebSearchAI(housingUrl)
-        vacationData = search.getVacationData()
+        vacationData = search.GetVacationData()
 
         #Iterates through the price and names list to create VacationData objects
         index = 0
