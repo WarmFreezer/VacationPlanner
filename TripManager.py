@@ -44,6 +44,20 @@ class TripManager:
         #rDay = self.departure[3:4]
         #rYear = self.departure[6:9]
 
+        #charIndex = 0
+        #while (charIndex < len(self.destinationState)):
+        #    if (self.destinationState[charIndex] == ' '):
+        #        self.destinationState[charIndex] = '-'
+        #    print(self.destinationState)            
+        #    charIndex+=1
+            
+        #charIndex = 0
+        #while (charIndex < len(self.destinationCity)):
+        #    if (self.destinationCity[charIndex] == ' '):
+        #        self.destinationCity[charIndex] = '-'
+        #    print(self.destinationCity)
+        #    charIndex+=1
+
         #Example URL
         #https://www.vacasa.com/search?adults=2&arrival=04%2F20%2F2025&departure=04%2F26%2F2025&place=/usa/Florida/Miami/
         housingUrl = "https://www.vacasa.com/search?adults=" + str(self.vacationers) + "&arrival=04%2F20%2F2025&departure=04%2F26%2F2025&place=/usa/" + self.destinationState + "/" + self.destinationCity + "/"
@@ -57,7 +71,7 @@ class TripManager:
         index = 0
         while(index < len(self.vacationData)):
             self.flightData.append(FlightData("Spirit", self.destinationState, "05-16-2025", 100)) #remove
-            self.flightData.append(FlightData("Spirit", self.destinationState, "05-16-2025", 100)) #remove
+            self.flightData.append(FlightData("Spirit", self.destinationState, "05-23-2025", 100)) #remove
             index += 1
 
         print(str(len(self.flightData)))

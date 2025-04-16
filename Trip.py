@@ -1,8 +1,9 @@
-#By: Thomas Eubank
-#Stores trip information including vacation plan and flights
+#Internal libraries here
 from VacationData import VacationData
 from FlightData import FlightData
 
+#By: Thomas Eubank
+#Stores trip information including vacation plan and flights
 class Trip:
     def __init__(self, vacationData, flightData1, flightData2, eventCost, foodCost, additionalCosts, percentBudget, services, images):
         self.vacationData = vacationData
