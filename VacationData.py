@@ -5,7 +5,7 @@ class VacationData: #Objects of this type store the data for a vacation object
     
     def __init__(self, housing, housingCost, eventCost, foodCost, additionalCosts, itineraryDescription):
         #Below this line are housing info
-        self.housing = housing #Stores the name and the address of the housing option
+        self.housing = housing #Stores the name and/or the address of the housing option
         self.housingCost = housingCost #Stores the cost of the housing
         #Below this line are other costs
         self.eventCost = eventCost
@@ -25,5 +25,15 @@ class VacationData: #Objects of this type store the data for a vacation object
         self.services = services
         self.images = images
 
-    def CalcPercentBudget(budget):
-        percentBudget = housingCost/budget
+    def __init__(self, housing, housingCost): #Simplified constructor since we are running out of time
+        self.housing = housing
+        self.housingCost = housingCost
+
+    def CalcPercentBudget(self, budget): #Percent of budget used for housing
+        percentBudget = self.housingCost/budget
+
+    def ToString(self):
+        string = []
+        string.append(self.housing)
+        string.append(str(self.housingCost)) #Add event cost and itenerary description if we have time
+        return string

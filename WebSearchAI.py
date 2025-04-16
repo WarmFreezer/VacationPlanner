@@ -20,8 +20,6 @@ class WebSearchAI:
     driver = None
 
     def __init__(self, url):
-        tempListings = [] 
-
         print(selenium.__version__)
         #Setup headless Chrome
         chrome_options = Options()
@@ -57,14 +55,11 @@ class WebSearchAI:
             housingList = table.select_one('div.row.mt-16.mb-8.px-16')
             if housingList:
                 for card in housingList.select('div.px-8.my-8.unit-result-list'):
-                    #print(card)
-                    tempListings.append(card)
+                    self.listings.append(card)
             else:
                 print("housingList found, but no listings inside.")
 
-        listings = tempListings
-
-    def getPrices(self):
+    def GetPrices(self):
         prices = []
         for card in self.listings:
             try:
@@ -72,13 +67,12 @@ class WebSearchAI:
                 #Locates the text containing the price of the housing listing
                 price = str(listingHeader.find('div').find('div').find('span').find('a').text.strip())
                 prices.append(price)
-                print (price)
             except nullcontext:
                 print ("Something went wrong...")
         
         return prices
 
-    def getNames(self):
+    def GetNames(self):
         names = []
         for card in self.listings:
             try:
@@ -86,20 +80,19 @@ class WebSearchAI:
                 #Locates the text containing the name of the housing option
                 option = str(listingHeader.find('h2').find('a').text.strip())
                 names.append(option)
-                print (option)
             except nullcontext:
                 print ("Something went wrong...")
 
         return names
 
-    def getVacationData(self):
-        names = self.getNames()
-        prices = self.getPrices()
+    def GetVacationData(self):
+        names = self.GetNames()
+        prices = self.GetPrices()
         vacationData = []
 
         index = 0
         while (index < len(names)):
-            self.vacationData.append(VacationData(names[i], self.prices[i], 100, 100, 100, "Iten Descr"))
+            vacationData.append(VacationData(names[index], prices[index]))
             index += 1
 
         return vacationData

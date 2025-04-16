@@ -3,85 +3,81 @@ from TripManager import TripManager
 
 #External libraries here
 import streamlit as st
-import json
-import os
-
-base_dir = os.path.dirname(os.path.abspath(__file__))
-file_path = os.path.join(base_dir, "trips.json")
 
 tripManager = TripManager(10000, "Departure", "Florida", "Miami", "05/16/2025", "05/23/2025", 2)
 trips = tripManager.MainSearch() #Stores all trips returned from main search
 
-# Load your JSON data
-with open(file_path, 'r') as f:
-    data = json.load(f)
+print (len(trips))
 
-# Main app title
-st.title("🧳 Budget Trip Planner")
+for trip in trips:
+    trip = trip.ToString()
+    for tripAttributes in trip:
+        st.write(tripAttributes)
 
-# Sidebar for selecting the destination
-st.sidebar.header("Plan Your Trip")
-location_names = [place["location"] for place in data]
-selected_location = st.sidebar.selectbox("Choose a destination:", location_names)
+# --- Page Title ---
+st.title(" Vacation Budget Planner")
 
-# Find the selected location details
-selected_place = next((place for place in data if place["location"] == selected_location), None)
+# --- Sidebar: Budget Setup ---
+st.sidebar.header("1. Budget Setup")
 
-# Show selections
-if selected_place:
-    st.sidebar.subheader("Choose Amenities")
-    amenity_options = [a["name"] for a in selected_place["amenities"]]
-    selected_amenities = st.sidebar.multiselect("Select amenities:", amenity_options)
+# Total Vacation Budget (now using text input with placeholder)
+budget_input = st.sidebar.text_input("Enter your total vacation budget ($)", placeholder="e.g., 2000")
 
-    st.sidebar.subheader("Choose Entertainment")
-    entertainment_options = [e["name"] for e in selected_place["entertainment"]]
-    selected_entertainment = st.sidebar.multiselect("Select entertainment:", entertainment_options)
+# Make sure budget_input is a valid number before converting
+try:
+    total_budget = float(budget_input) if budget_input else 0.0
+except ValueError:
+    total_budget = 0.0
+    st.sidebar.error("❗ Please enter a valid number for the budget.")
 
-    st.sidebar.subheader("Choose Places to Stay")
-    stay_options = [s["name"] for s in selected_place["places_to_stay"]]
-    selected_stays = st.sidebar.multiselect("Select places to stay:", stay_options)
+# Initialize remaining percentage
+remaining_percentage = 100.0
 
-    st.sidebar.subheader("Choose Food Options")
-    food_options = [f["name"] for f in selected_place["food"]]
-    selected_food = st.sidebar.multiselect("Select food options:", food_options)
+# --- Sidebar: Allocate Budget ---
+st.sidebar.subheader("Allocate your budget by category (%)")
 
-    # Main Page Output
-    st.header(f"Trip Details for {selected_place['location']}, {selected_place['city']}, {selected_place['state']}")
+if total_budget > 0:
+    food_pct = st.sidebar.slider("Food (%)", min_value=0.0, max_value=remaining_percentage, value=0.0, step=0.5)
+    remaining_percentage -= food_pct
 
-    # 🛝 Show selected amenities (no expander!)
-    st.subheader("🛝 Selected Amenities")
-    if selected_amenities:
-        for amenity in selected_place["amenities"]:
-            if amenity["name"] in selected_amenities:
-                st.write(f"• **{amenity['name']}** — {amenity['estimated_price']}")
-    else:
-        st.info("No amenities selected.")
+    lodging_pct = st.sidebar.slider("Lodging (%)", min_value=0.0, max_value=remaining_percentage, value=0.0, step=0.5)
+    remaining_percentage -= lodging_pct
 
-    # 🎭 Show selected entertainment
-    st.subheader("🎭 Selected Entertainment")
-    if selected_entertainment:
-        for entertainment in selected_place["entertainment"]:
-            if entertainment["name"] in selected_entertainment:
-                st.write(f"• **{entertainment['name']}** — {entertainment['estimated_price']}")
-    else:
-        st.info("No entertainment selected.")
+    entertainment_pct = st.sidebar.slider("Entertainment (%)", min_value=0.0, max_value=remaining_percentage, value=0.0, step=0.5)
+    remaining_percentage -= entertainment_pct
 
-"""
-#---App Functions Separate from UI Below---#
-budget
-departure
-destinationState
-d_date
-r_date
-vacationers
-rental
+    airfare_pct = st.sidebar.slider("Airfare (%)", min_value=0.0, max_value=remaining_percentage, value=0.0, step=0.5)
+    remaining_percentage -= airfare_pct
 
-    # 🍔 Show selected food options
-    st.subheader("🍔 Selected Food Options")
-    if selected_food:
-        for food in selected_place["food"]:
-            if food["name"] in selected_food:
-                st.write(f"• **{food['type']}** — {food['name']} — {food['estimated_price_per_meal']}")
-    else:
-        st.info("No food options selected.")
-"""
+    spending_pct = st.sidebar.slider("Spending Money (%)", min_value=0.0, max_value=remaining_percentage, value=0.0, step=0.5)
+    remaining_percentage -= spending_pct
+
+    st.sidebar.info(f"Remaining Budget: {remaining_percentage:.1f}%")
+
+    # --- Validate Percentages ---
+    total_pct = food_pct + lodging_pct + entertainment_pct + airfare_pct + spending_pct
+
+    if st.sidebar.button("Validate Budget Allocation"):
+        st.header("Budget Allocation Summary")
+
+        if total_pct > 100:
+            st.error(f"❗ You allocated {total_pct:.1f}%, which is more than 100%. Please adjust.")
+        elif total_pct < 100:
+            st.error(f"❗ You allocated {total_pct:.1f}%, which is less than 100%. Please adjust.")
+        else:
+            st.success("✅ Budget allocations are valid!")
+
+            # Calculate dollar amounts
+            food_amt = (food_pct / 100) * total_budget
+            lodging_amt = (lodging_pct / 100) * total_budget
+            entertainment_amt = (entertainment_pct / 100) * total_budget
+            airfare_amt = (airfare_pct / 100) * total_budget
+            spending_amt = (spending_pct / 100) * total_budget
+
+            # --- Main page: Show the calculated budget
+            st.subheader("Your Budget Allocation Summary:")
+            st.write(f" Food: ${food_amt:.2f} ({food_pct:.1f}%)")
+            st.write(f" Lodging: ${lodging_amt:.2f} ({lodging_pct:.1f}%)")
+            st.write(f" Entertainment: ${entertainment_amt:.2f} ({entertainment_pct:.1f}%)")
+            st.write(f" Airfare: ${airfare_amt:.2f} ({airfare_pct:.1f}%)")
+            st.write(f" Spending Money: ${spending_amt:.2f} ({spending_pct:.1f}%)")
