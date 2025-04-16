@@ -29,6 +29,11 @@ class Trip:
         self.vacationData = vacationData
         self.flightData1 = flightData1
         self.flightData2 = flightData2
+
+    def __init__(self, vacationData):
+        self.vacationData = vacationData
+        self.flightData1 = FlightData()
+        self.flightData2 = FlightData()
     
     def ToString(self):
         string = []

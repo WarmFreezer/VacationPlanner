@@ -10,6 +10,11 @@ class FlightData: #Objects of this type contain flight information for other cla
         self.d_time = d_time #Stores the departure date/time
         self.price = price #Stores the price of the flight
 
+    def __init__(self):
+        self.airline = ""
+        self.d_time = ""
+        self.price = ""
+
     def ToString(self):
         string = []
         string.append(self.airline)

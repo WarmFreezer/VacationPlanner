@@ -29,6 +29,10 @@ class VacationData: #Objects of this type store the data for a vacation object
         self.housing = housing
         self.housingCost = housingCost
 
+    def __init__(self):
+        self.housing = "Sorry, there was no housing available meeting this criteria. "
+        self.housingCost = -1
+
     def CalcPercentBudget(self, budget): #Percent of budget used for housing
         percentBudget = self.housingCost/budget
 

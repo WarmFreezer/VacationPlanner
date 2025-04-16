@@ -1,7 +1,7 @@
 #Internal libraries here
 from WebSearchAI import WebSearchAI
 from FlightScraper import FlightScraper
-from Trip import Trip
+from Trip import Trip, VacationData
 from FlightData import FlightData
 
 #External Libraries Here
@@ -44,19 +44,11 @@ class TripManager:
         #rDay = self.departure[3:4]
         #rYear = self.departure[6:9]
 
-        #charIndex = 0
-        #while (charIndex < len(self.destinationState)):
-        #    if (self.destinationState[charIndex] == ' '):
-        #        self.destinationState[charIndex] = '-'
-        #    print(self.destinationState)            
-        #    charIndex+=1
-            
-        #charIndex = 0
-        #while (charIndex < len(self.destinationCity)):
-        #    if (self.destinationCity[charIndex] == ' '):
-        #        self.destinationCity[charIndex] = '-'
-        #    print(self.destinationCity)
-        #    charIndex+=1
+        self.destinationState = self.destinationState.replace(' ', '-')
+        print(self.destinationState)
+         
+        self.destinationCity = self.destinationCity.replace(' ', '-')
+        print(self.destinationCity)             
 
         #Example URL
         #https://www.vacasa.com/search?adults=2&arrival=04%2F20%2F2025&departure=04%2F26%2F2025&place=/usa/Florida/Miami/
@@ -86,6 +78,9 @@ class TripManager:
         while (index < len(self.vacationData)):
             self.tripList.append(Trip(self.vacationData[index], self.flightData[2 * index], self.flightData[2 * index + 1]))
             index += 1
+
+        if (len(self.tripList) == 0):
+            self.tripList.append(Trip(VacationData()))
 
         return self.tripList
 
