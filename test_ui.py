@@ -1,8 +1,10 @@
-﻿
+﻿# Author: Savanna Booten 
+
 import streamlit as st
 
 # --- Page Title ---
-st.title(" Vacation Budget Planner")
+st.title("😊 Vacation Budget Planner 📖")
+
 
 # --- Sidebar: Budget Setup ---
 st.sidebar.header("1. Budget Setup")
@@ -61,10 +63,10 @@ if total_budget > 0:
             airfare_amt = (airfare_pct / 100) * total_budget
             spending_amt = (spending_pct / 100) * total_budget
 
-            # --- Main page: Show the calculated budget
+            # --- Main page: Show the calculated budget with emojis
             st.subheader("Your Budget Allocation Summary:")
-            st.write(f" Food: ${food_amt:.2f} ({food_pct:.1f}%)")
-            st.write(f" Lodging: ${lodging_amt:.2f} ({lodging_pct:.1f}%)")
-            st.write(f" Entertainment: ${entertainment_amt:.2f} ({entertainment_pct:.1f}%)")
-            st.write(f" Airfare: ${airfare_amt:.2f} ({airfare_pct:.1f}%)")
-            st.write(f" Spending Money: ${spending_amt:.2f} ({spending_pct:.1f}%)")
+            st.write(f"🍴 Food: ${food_amt:.2f} ({food_pct:.1f}%)")
+            st.write(f"🏨 Lodging: ${lodging_amt:.2f} ({lodging_pct:.1f}%)")
+            st.write(f"🎉 Entertainment: ${entertainment_amt:.2f} ({entertainment_pct:.1f}%)")
+            st.write(f"✈️ Airfare: ${airfare_amt:.2f} ({airfare_pct:.1f}%)")
+            st.write(f"🛍️ Spending Money: ${spending_amt:.2f} ({spending_pct:.1f}%)")
