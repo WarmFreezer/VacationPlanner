@@ -32,7 +32,19 @@ class TripManager:
         self.returnDate = returnDate
         self.vacationers = vacationers
 
-    def MainSearch(self):
+    def MainSearch(self): 
+        #dMonth = self.departureDate[0:1]
+        #dDay = self.departure[3:4]
+        #dYear = self.departure[6:9]
+
+        #print (dMonth)
+        #print (dDay)
+        #print(dYear)
+
+        #rMonth = self.returnDate[0:1]
+        #rDay = self.departure[3:4]
+        #rYear = self.departure[6:9]
+
         #Example URL
         #https://www.vacasa.com/search?adults=2&arrival=04%2F20%2F2025&departure=04%2F26%2F2025&place=/usa/Florida/Miami/
         housingUrl = "https://www.vacasa.com/search?adults=" + str(self.vacationers) + "&arrival=04%2F20%2F2025&departure=04%2F26%2F2025&place=/usa/" + self.destinationState + "/" + self.destinationCity + "/"

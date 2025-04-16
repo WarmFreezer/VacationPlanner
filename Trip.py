@@ -1,7 +1,7 @@
 #By: Thomas Eubank
 #Stores trip information including vacation plan and flights
-from TripManager import VacationData
-
+from VacationData import VacationData
+from FlightData import FlightData
 
 class Trip:
     def __init__(self, vacation, flightData1, flightData2, eventCost, foodCost, additionalCosts, percentBudget, services, images):
