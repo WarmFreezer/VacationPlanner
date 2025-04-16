@@ -13,8 +13,8 @@ tripManager = TripManager(10000, "Departure", "Florida", "Miami", "05/16/2025", 
 trips = tripManager.MainSearch() #Stores all trips returned from main search
 
 # Load your JSON data
-with open(file_path, 'r') as f:
-    data = json.load(f)
+#with open(file_path, 'r') as f:
+#   data = json.load(f)
 
 # Main app title
 st.title("🧳 Budget Trip Planner")
