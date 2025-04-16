@@ -1,3 +1,6 @@
+#Internal libraries here
+from VacationData import VacationData
+
 #External libraries here
 from contextlib import nullcontext
 from types import NoneType
@@ -88,3 +91,15 @@ class WebSearchAI:
                 print ("Something went wrong...")
 
         return names
+
+    def getVacationData(self):
+        names = self.getNames()
+        prices = self.getPrices()
+        vacationData = []
+
+        index = 0
+        while (index < len(names)):
+            self.vacationData.append(VacationData(names[i], self.prices[i], 100, 100, 100, "Iten Descr"))
+            index += 1
+
+        return vacationData
