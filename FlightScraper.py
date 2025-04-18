@@ -24,7 +24,7 @@ class FlightScraper:
         service = Service(executable_path=chromedriver_path)
         driver = webdriver.Chrome(service=service, options=chrome_options)
         #Google flights website
-        driver.get(https://www.google.com/travel/flights?gl=US&hl=en-US)
+        driver.get("https://www.google.com/travel/flights?gl=US&hl=en-US")
 
         input_element = driver.find_element(By.XPATH, "//*[@id="i23"]/div[6]/div[2]/div[2]/div[1]/div/input")
 
