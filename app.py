@@ -4,7 +4,7 @@ from TripManager import TripManager
 #External libraries here
 import streamlit as st
 
-tripManager = TripManager(10000, "Departure", "California", "Los Angeles", "06/22/2025", "06/28/2025", 1)
+tripManager = TripManager(10000, "Departure", "Florida", "Miami", "06/15/2025", "06/21/2025", 1)
 trips = tripManager.MainSearch() #Stores all trips returned from main search
 
 print (len(trips))
