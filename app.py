@@ -9,6 +9,7 @@ trips = tripManager.MainSearch() #Stores all trips returned from main search
 
 print (len(trips))
 
+# prints are from here
 for trip in trips:
     trip = trip.ToString()
     for tripAttributes in trip:
