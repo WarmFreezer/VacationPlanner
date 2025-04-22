@@ -1,63 +1,38 @@
+#This program searches for available flights off of Google Flights using a Chrome Web Browser
 from FlightData import FlightData
+import selenium
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+import bs4
+import time
+import os
 
 class FlightScraper:
-    #Trip information
-    departure: str
-    destination: str
-    d_date: str
-    r_date: str
-    fliers: int
+    def SearchFlights(self, departure: str, destination: list[str], d_date: str, r_date: str) -> list[FlightData]:
+        #Setup headless Chrome
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--disable-gpu")
+        chrome_options.add_argument("--no-sandbox")
 
-    #Flight information to collect
-    SELECTORS = {
-        "airline": "div.sSHqwe.tPgKwe.ogfYpf",
-        "departure_time": 'span[aria-label^="Departure time"]',
-        "price": "div.FpEdX span"}
+        #Path to chromedriver
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        chromedriver_path = os.path.join(base_dir, "chromedriver-win64", "chromedriver.exe")
+        service = Service(executable_path=chromedriver_path)
+        driver = webdriver.Chrome(service=service, options=chrome_options)
+        #Google flights website
+        driver.get("https://www.google.com/travel/flights?gl=US&hl=en-US")
 
-    #Function to return a list of flights and their information
-    async def GetFlights(self, page, params: FlightData) -> list[FlightData]:
-        #Locates the ticket type button, clicks it, waits for the field to appear, and type in ticket type
-        ticket_type = page.locator("div.VfPpkd-TkwUic[jsname='oYxtQd']").first
-        await ticket_type.click()
-        await page.wait_for_selector("ul[aria-label='Select your ticket type.']")
-        await page.locator("li").filter(has_text="Two way").nth(0).click() #For the vacation planner, Im going with the assumption of round trips so I predefined two-way ticket
+        input_element = driver.find_element(By.XPATH, '//*[@id="i23"]/div[6]/div[2]/div[2]/div[1]/div/input')
 
-        #Locates the departure location field, clicks on it, and fills in the departure location
-        from_input = page.locator("input[aria-label='Where from?']")
-        await from_input.click()
-        await from_input.fill("")
-        await page.keyboard.type(self.departure)
 
-        #If there are more flights not initially listed, locates and clicks the more flights button.
-        #If there aren't more flights, continue
-        while True:
-            try:
-                more_button = await page.wait_for_selector('button[aria-label*="more flights"]', timeout=5000)
-                if more_button:
-                    await more_button.click()
-                    await page.wait_for_timeout(2000)
-                else:
-                    break
-            except:
-                break
+        time.sleep(10)
 
-        #Waits for more flights to appear if applicable and loads all flights on the page
-        await page.wait_for_selector("li.pIav2d", timeout=30000)
-        await self._load_all_flights(page)
+        driver.quit()
 
-        #Places all the flights into an array and creates an array that'll hold the formatted information
-        flights = await page.query_selector_all("li.pIav2d")
-        flights_data = []
-
-        #Runs through each flight in flights and parses the information into the formatted array
-        for flight in flights:
-            flight_info = {}
-            for key, selector in self.SELECTORS.items():
-                element = await flight.query_selector(selector)
-                flight_info[key] = await self._extract_text(element)
-                flights_data.append(FlightData(**flight_info))
-        #Returns flights_data as a list of flights
-        return flights_data
 
 
 
