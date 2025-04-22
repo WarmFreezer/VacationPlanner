@@ -49,8 +49,8 @@ class TripManager:
         housingUrl = "https://www.vacasa.com/search?adults=" + str(self.vacationers) + "&arrival=" + dMonth + "%2F"+ dDay + "%2F" + dYear + "&departure=" + rMonth + "%2F" + rDay + "%2F" + rYear + "&place=/usa/" + self.destinationState + "/" + self.destinationCity + "/" #Current Vacasa URL
 
         #Example events URL
-        #https://www.eventbrite.com/d/united-states--florida/all-events/
-        eventsUrl = "https://www.eventbrite.com/d/united-states--" + self.destinationState +"/all-events/" #Current Eventbrite URL
+        #https://www.eventbrite.com/d/united-states--florida/all-events/?page=1&start_date=2025-04-27&end_date=2025-05-03
+        eventsUrl = "https://www.eventbrite.com/d/united-states--" + self.destinationState +"/all-events/?page=1&start_date=" + dYear + "-" + dMonth + "-" + dDay + "&end_date=" + rYear + "-" + rMonth + "-" + rDay #Current Eventbrite URL
 
         search = WebSearch() #New webSearch obj
         search.GetHousing(housingUrl) #Search this url for housing
