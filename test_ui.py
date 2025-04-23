@@ -1,5 +1,6 @@
 ﻿import streamlit as st
 from datetime import date
+from TripManager import TripManager
 
 # --- Page Title ---
 st.title("😊 Vacation Budget Planner 📖")
@@ -7,87 +8,80 @@ st.title("😊 Vacation Budget Planner 📖")
 # --- Sidebar: Budget Setup ---
 st.sidebar.header("1. Budget Setup")
 
-# Total Vacation Budget (now using text input with placeholder)
+# User Inputs
+budget: int = 0
 budget_input = st.sidebar.text_input("Enter your total vacation budget ($)", placeholder="e.g., 2000")
 
 try:
-    total_budget = float(budget_input) if budget_input else 0.0
+    budget = float(budget_input) if budget_input else 0.0
 except ValueError:
-    total_budget = 0.0
+    budget = 0.0
     st.sidebar.error("❗ Please enter a valid number for the budget.")
-
-# Remaining percentage
-remaining_percentage = 100.0
-
-# --- Sidebar: Allocate Budget ---
-st.sidebar.subheader("Allocate your budget by category (%)")
-
-if total_budget > 0:
-    food_pct = st.sidebar.slider("Food (%)", 0.0, remaining_percentage, 0.0, step=0.5)
-    remaining_percentage -= food_pct
-
-    lodging_pct = st.sidebar.slider("Lodging (%)", 0.0, remaining_percentage, 0.0, step=0.5)
-    remaining_percentage -= lodging_pct
-
-    entertainment_pct = st.sidebar.slider("Entertainment (%)", 0.0, remaining_percentage, 0.0, step=0.5)
-    remaining_percentage -= entertainment_pct
-
-    airfare_pct = st.sidebar.slider("Airfare (%)", 0.0, remaining_percentage, 0.0, step=0.5)
-    remaining_percentage -= airfare_pct
-
-    spending_pct = st.sidebar.slider("Spending Money (%)", 0.0, remaining_percentage, 0.0, step=0.5)
-    remaining_percentage -= spending_pct
-
-    st.sidebar.info(f"Remaining Budget: {remaining_percentage:.1f}%")
 
 # --- Sidebar: Trip Information ---
 st.sidebar.header("2. Trip Info")
 
 states = ["Florida", "California", "Texas", "Kentucky", "New York"]
 
-departure_state = st.sidebar.selectbox("Departure State", states)
-destination_state = st.sidebar.selectbox("Destination State", states)
-destination_city = st.sidebar.text_input("Destination City", placeholder="e.g., Miami")
+departure: str = st.sidebar.selectbox("Departure State", states)
+destinationState: str = st.sidebar.selectbox("Destination State", states)
+destinationCity: str = st.sidebar.text_input("Destination City", placeholder="e.g., Miami")
 
-departure_date = st.sidebar.date_input("Departure Date", min_value=date.today())
+departureDate_obj = st.sidebar.date_input("Departure Date", min_value=date.today())
+returnDate_obj = st.sidebar.date_input("Return Date", min_value=departureDate_obj)
 
+departureDate: str = departureDate_obj.strftime("%m/%d/%Y")
+returnDate: str = returnDate_obj.strftime("%m/%d/%Y")
 
-return_date = st.sidebar.date_input("Return Date", min_value=departure_date)
-
-
-vacationers = st.sidebar.number_input("Number of Vacationers", min_value=1, step=1)
+vacationers: int = int(st.sidebar.number_input("Number of Vacationers", min_value=1, step=1))
 
 # --- Validate and Show Summary on Main Page ---
-if st.sidebar.button("Validate Vaccation Plan"):
-    st.header("📊 Budget Allocation Summary")
+if st.sidebar.button("Validate Vacation Plan") and budget > 0:
+    st.header("📊 Vacation Plan Summary")
 
-    total_pct = food_pct + lodging_pct + entertainment_pct + airfare_pct + spending_pct
+    st.success("✅ Budget and trip information submitted successfully!")
 
-    if total_pct != 100:
-        st.error(f"❗ Your total is {total_pct:.1f}%. Please make sure it equals 100%.")
+    st.markdown(f"""
+    **📍 Departure State:** {departure}  
+    **🏖️ Destination:** {destinationCity}, {destinationState}  
+    **📅 Dates:** {departureDate} to {returnDate}  
+    **🧑 Travelers:** {vacationers}  
+    **💰 Budget:** ${budget:,.2f}
+    """)
+
+    # Use dynamic user inputs to create TripManager
+    user_trip_manager = TripManager(
+        budget=budget,
+        departure=departure,
+        destinationState=destinationState,
+        destinationCity=destinationCity,
+        departureDate=departureDate,
+        returnDate=returnDate,
+        vacationers=vacationers
+    )
+
+    user_trips = user_trip_manager.MainSearch()
+
+    st.subheader("🌿 Recommended Trip Options (Based on Your Input)")
+    if not user_trips:
+        st.warning("No trips were found for your criteria.")
     else:
-        st.success("✅ Budget allocations are valid!")
+        for i, trip in enumerate(user_trips):
+            st.markdown(f"### ✈️ Trip {i+1}")
+            trip_details = trip.ToString()
+            for detail in trip_details:
+                st.write(f"• {detail}")
 
-        # Calculate dollar amounts
-        food_amt = (food_pct / 100) * total_budget
-        lodging_amt = (lodging_pct / 100) * total_budget
-        entertainment_amt = (entertainment_pct / 100) * total_budget
-        airfare_amt = (airfare_pct / 100) * total_budget
-        spending_amt = (spending_pct / 100) * total_budget
 
-        # Display budget results
-        st.subheader("Your Budget Allocation:")
-        st.write(f"🍴 Food: ${food_amt:.2f} ({food_pct:.1f}%)")
-        st.write(f"🏨 Lodging: ${lodging_amt:.2f} ({lodging_pct:.1f}%)")
-        st.write(f"🎉 Entertainment: ${entertainment_amt:.2f} ({entertainment_pct:.1f}%)")
-        st.write(f"✈️ Airfare: ${airfare_amt:.2f} ({airfare_pct:.1f}%)")
-        st.write(f"🛍️ Spending Money: ${spending_amt:.2f} ({spending_pct:.1f}%)")
+# --- Hardcoded Example (Preserved from Original Code) ---
+st.subheader("🛠️ Hardcoded Example Trips (for Testing)")
+tripManager = TripManager(10000, "Departure", "Florida", "Miami", "06/15/2025", "06/21/2025", 1)
+trips = tripManager.MainSearch()
 
-       # Display trip info
-        st.subheader("Your Trip Details:")
-        st.markdown(f"""
-        **📍 Departure State:** {departure_state}  
-        **🏖️ Destination:** {destination_city}, {destination_state}  
-        **📅 Dates:** {departure_date.strftime("%m/%d/%Y")} to {return_date.strftime("%m/%d/%Y")}  
-        **🧑 Travelers:** {vacationers}
-        """)
+print(len(trips))
+
+for trip in trips:
+    trip = trip.ToString()
+    for tripAttributes in trip:
+        st.write(tripAttributes)
+

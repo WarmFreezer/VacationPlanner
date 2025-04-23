@@ -9,6 +9,7 @@ trips = tripManager.MainSearch() #Stores all trips returned from main search
 
 print (len(trips))
 
+
 # prints are from here
 for trip in trips:
     trip = trip.ToString()
@@ -23,6 +24,7 @@ st.sidebar.header("1. Budget Setup")
 
 # Total Vacation Budget (now using text input with placeholder)
 budget_input = st.sidebar.text_input("Enter your total vacation budget ($)", placeholder="e.g., 2000")
+
 
 # Make sure budget_input is a valid number before converting
 try:
