@@ -11,7 +11,7 @@ import time
 import os
 
 class FlightScraper:
-    def SearchFlights(self, departure: str, destination: list[str], d_date: str, r_date: str, flier_count: int) -> list[FlightData]:
+    def SearchFlights(self, departure: str, destination: str, d_date: str, r_date: str, flier_count: int):
         #Setup headless Chrome
         chrome_options = Options()
         chrome_options.add_argument("--headless")
@@ -26,45 +26,57 @@ class FlightScraper:
         #Google flights website
         driver.get("https://www.google.com/travel/flights?gl=US&hl=en-US")
 
-        if (len(destination) != 0):
-            #Inputs the first entry, the XPATH's change after the first entry
-            driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div/div[2]/div[1]/div[1]/div/div/div[1]/div/div/input').send_keys(departure)
-            driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[1]/div/div[2]/div[1]/div[6]/div[2]/div[2]/div[1]/div/input').send_keys(destination[0])
-            driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/div[1]/div/div/div[1]/div/div[1]/div/input').send_keys(d_date)
-            driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/div[2]/div/div[2]/div[1]/div[1]/div[2]/div/input').send_keys(r_date)
-            
-            #Sets the number of fliers
-            #Opens the flier count popup
-            driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div/div[1]/div/button').click()
-            #Wait for the popup to load
-            time.sleep(1)
-            #Adds a flier for each additional person on the trip above 1 (1 is default)
-            add_flier = driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div/div[2]/ul/li[1]/div/div/span[3]/button').click()
-            for i in range(self.fliers - 1):
-                add_flier.click()
-            #Closes the flier count popup
-            driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div/div[2]/div[2]/button[1]').click()
+        #Input search parameters
+        driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div/div[2]/div[1]/div[1]/div/div/div[1]/div/div/input').send_keys(departure)
+        driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[1]/div/div[2]/div[1]/div[6]/div[2]/div[2]/div[1]/div/input').send_keys(destination)
+        driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/div[1]/div/div/div[1]/div/div[1]/div/input').send_keys(d_date)
+        driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/div[2]/div/div[2]/div[1]/div[1]/div[2]/div/input').send_keys(r_date)
 
-            #Sets the flight filter to show only continuous flights
-            #Clicks search
-            driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[2]/div/button').click()
-            #Clicks all filters to open the popup
-            driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div/div[4]/div/div/div[1]/div/button').click()
-            #Clicks the "hide separate and self-transfer tickets"
-            driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div/div[4]/div/div[2]/div[3]/div/div[2]/div/div[1]/section[9]/div/div[1]/div/div/div/div[2]/div/div/input').click()
-            #closes the all filters popup
-            driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div/div[4]/div/div[2]/div[3]/div/div[1]/div[2]/span/button').click()
-            #Waits for the flights to load
-            time.sleep(5)
+        #Open the flier count popup, set the number of fliers, then close the popup
+        popup = driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div/div[1]/div/button')
+        
+        popup.click()
+        time.sleep(1)
+        add_flier = driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[1]/div/div[1]/div[2]/div/div[2]/ul/li[1]/div/div/span[3]/button').click()
+        for i in range(self.fliers - 1):
+            add_flier.click()
+        popup.click()
 
+        #Opens the filters, hides separate and self-transfer flights, then closes the filters.
+        driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div[1]/div[2]/div/button').click()
+        driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div/div[4]/div/div/div[1]/div/button').click()
+        driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div/div[4]/div/div[2]/div[3]/div/div[2]/div/div[1]/section[9]/div/div[1]/div/div/div/div[2]/div/div/input').click()
+        driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div/div[4]/div/div[2]/div[3]/div/div[1]/div[2]/span/button').click()
 
+        #Selects cheapest
+        driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[2]/div/div[1]/div[2]').click()
 
-            if (len(destination) > 1):
-                for i in range(len(destination - 2)):
+        p1 = int(driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[2]/div/div[3]/div[2]/ul/li[1]/div/div[2]/div/div[2]/div/div[6]/div[1]/div[2]/span').getText()[1:])
+        p2 = int(driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[2]/div/div[3]/div[3]/ul/li[1]/div/div[2]/div/div[2]/div/div[6]/div[1]/div[2]/span').getText()[1:])
 
-            
+        airline = ""
+        dest = ""
+        dt = ""
+        price = 0.0
+
+        driver.find_element(By.XPATH, '').getText()
+
+        if (p1 < p2):
+            airline = driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[2]/div/div[3]/div[2]/ul/li[1]/div/div[2]/div/div[2]/div/div[2]/div[2]/span[1]').getText()
+            dest = destination
+            dt = driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[2]/div/div[3]/div[2]/ul/li[1]/div/div[2]/div/div[2]/div/div[2]/div[1]/span/span[1]/span/span/span').getText()
+            price = p1
+        else:
+            airline = driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[2]/div/div[3]/div[3]/ul/li[1]/div/div[2]/div/div[2]/div/div[2]/div[2]/span').getText()
+            dest = destination
+            dt = driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[2]/div[2]/div/div[3]/div[3]/ul/li[1]/div/div[2]/div/div[2]/div/div[2]/div[1]/span/span[1]/span/span/span').getText()
+            price = p2
 
         driver.quit()
+
+        flight = FlightData(airline, dest, dt, price)
+
+        return flight
 
 
 
