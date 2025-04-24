@@ -6,6 +6,7 @@ from FlightData import FlightData
 
 #External Libraries Here
 import streamlit as st
+from datetime import date
 
 #By: Thomas Eubank
 #Designed to create trip objects from a combination of a vacationData object and 2 flightData objects
@@ -68,9 +69,13 @@ class TripManager:
         index = 0
         while (index < len(self.vacationData)): #Parse through vacationData
             trip = Trip(self.vacationData[index], self.flightData[2 * index], self.flightData[2 * index + 1]) #Define a trip object to be tested
-            housingCost = float(trip.ToString()[0][1])
+            
+            dateOfDeparture = date(int(dYear), int(dMonth), int(dDay))
+            dateOfReturn = date(int(rYear), int(rMonth), int(rDay))
+
+            housingCost = float(trip.ToString()[0][1]) * abs((dateOfReturn - dateOfDeparture).days)
             eventCost = float(trip.ToString()[0][3])
-            if (housingCost + eventCost * int(self.vacationers) < int(self.budget)): #if housingCost + eventCost * vacationers < budget    
+            if (housingCost + eventCost * int(self.vacationers) < int(self.budget) / 2): #if housingCost + eventCost * vacationers < budget    
                 self.tripList.append(trip) #Add to trip list
             index += 1 #Goto next item in list
 
