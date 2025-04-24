@@ -26,10 +26,10 @@ class FlightScraper:
         #Google flights website
         driver.get("https://www.google.com/travel/flights?gl=US&hl=en-US")
 
-        input_element = driver.find_element(By.XPATH, '//*[@id="i23"]/div[6]/div[2]/div[2]/div[1]/div/input')
+        driver.find_element(By.XPATH, '/html/body/c-wiz[2]/div/div[2]/c-wiz/div[1]/c-wiz/div[2]/div[1]/div/div[2]/div[1]/div[1]/div/div/div[1]/div/div/input').send_keys(departure)
 
-
-        time.sleep(10)
+        for i in destination:
+            
 
         driver.quit()
 
