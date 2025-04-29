@@ -14,14 +14,13 @@ import os
 
 
 class FlightScraper:
+    airline = ""
+    dest = ""
+    dt = ""
+    rt = ""
+    price = 0.0
+    
     def __init__(self, url: str):
-        self.airline = ""
-        self.dest = ""
-        self.dt = ""
-        self.rt = ""
-        self.price = 0.0
-
-
         #Setup headless Chrome
         chrome_options = Options()
         chrome_options.add_argument("--headless")
@@ -32,20 +31,26 @@ class FlightScraper:
         chromedriver_path = os.path.join(base_dir, "chromedriver-win64", "chromedriver.exe")
         service = Service(executable_path=chromedriver_path)
         driver = webdriver.Chrome(options=chrome_options)
+        #print(url)
         driver.get(url) 
 
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(5)
+        time.sleep(2)
 
-        html = driver.find_element(By.XPATH, '/html/body/section/div/div/section/div/div/div/div[2]/div/div[2]/div[3]/div[5]/div').get_attribute('outerhtml')
+        print(driver.current_url)
+
+        elem = driver.find_element(By.CLASS_NAME, 'infinite-trip-list')
+        html = elem.get_attribute('outerHTML')
         soup = bs4.BeautifulSoup(html, 'html.parser')
+
+        print(soup.prettify())
 
         driver.quit()
 
         if "We couldn't display your results" in soup.text:
             print("No flight results found. Page returned an error message.")
         else:
-            flight = soup.select_one('div.trip trip__stops-0')
+            flight = soup.select_one('')
             if flight:
                 self.airline = str(flight.find('span').text_strip())
                 path = flight.find('div', class_='span9 trip-path')
@@ -55,4 +60,5 @@ class FlightScraper:
             else:
                 print("There are no available flights")
 
+    def getFlight(self) -> FlightData:
         return FlightData(self.airline, self.dt, self.rt, self.price)

@@ -7,8 +7,9 @@ from FlightScraper import FlightScraper
 from FlightData import FlightData
 
 
-flight = FlightScraper("https://skiplagged.com/flights/louisville/new-york/2025-05-16/2025-05-18")
-print(flight.ToString())
+flight = FlightScraper('https://skiplagged.com/flights/louisville/new-york/2025-05-16/2025-05-18')
+flData = flight.getFlight()
+print(flData.ToString())
 
 tripManager = TripManager(10000, "Departure", "Florida", "Miami", "06/15/2025", "06/21/2025", 1)
 trips = tripManager.MainSearch() #Stores all trips returned from main search
