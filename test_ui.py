@@ -43,8 +43,8 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
 
     st.markdown(f"""
     **📍 Departure State:** {departure}  
-    **🏖️ Destination:** {destinationCity}, {destinationState}  
-    **📅 Dates:** {departureDate} to {returnDate}  
+    **🏓️ Destination:** {destinationCity}, {destinationState}  
+    **🗓️ Dates:** {departureDate} to {returnDate}  
     **🧑 Travelers:** {vacationers}  
     **💰 Budget:** ${budget:,.2f}
     """)
@@ -54,7 +54,7 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
     with st.spinner("🔍 Planning your perfect trip..."):
         placeholder.info("🔄 Please wait, gathering trip data and calculating estimates...")
 
-    with st.spinner("🔄 Hold on taking a vaction..."):
+    with st.spinner("🔄 Hold on taking a vacation..."):
         placeholder.info("Please wait, gathering trip data and calculating estimates...")
 
         # Use dynamic user inputs to create TripManager
@@ -79,53 +79,45 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
     else:
         st.success(f"Found {len(user_trips)} options within your budget of ${budget:,.2f}")
 
-        # Create tabs for each trip option (up to 10 to avoid overwhelming the UI)
         trip_tabs = st.tabs([f"Trip Option {i+1}" for i in range(min(len(user_trips), 10))])
 
-        # Display each trip in its own tab
         for i, (tab, trip) in enumerate(zip(trip_tabs, user_trips[:10])):
             with tab:
                 trip_details = trip.ToString()
-
-                # Calculate trip duration
                 trip_days = (returnDate_obj - departureDate_obj).days
 
-                # Split into columns for better layout
                 col1, col2 = st.columns([3, 2])
 
                 with col1:
-                    # Format accommodation details
-                    # new code replacing the -1 place holder:
                     if len(trip_details) > 0 and len(trip_details[0]) >= 2:
                         housing = trip_details[0]
                         st.markdown("### 🏠 Accommodation")
 
-                    if float(housing[1])< 0 or housing[0].strip()== "":
-                        st.markdown("**Name:** Sorry, no housing available for this destination.")
-                        st.markdown("**Price:** Price not available")
-                        st.markdown("**Total:** N/A")
-                        housing_cost = 0  # For total cost calc
-                    else:
-                        total_housing_cost = float(housing[1]) * trip_days
-                        st.markdown(f"**Name:** {housing[0]}")
-                        st.markdown(f"**Price:** ${housing[1]}/night")
-                        st.markdown(f"**Total for {trip_days} nights:** ${total_housing_cost:.2f}")
+                        if float(housing[1]) < 0 or housing[0].strip() == "":
+                            st.markdown("**Name:** Sorry, no housing available for this destination.")
+                            st.markdown("**Price:** Price not available")
+                            st.markdown("**Total:** N/A")
+                            housing_cost = 0
+                        else:
+                            total_housing_cost = float(housing[1]) * trip_days
+                            st.markdown(f"**Name:** {housing[0]}")
+                            st.markdown(f"**Price:** ${housing[1]}/night")
+                            st.markdown(f"**Total for {trip_days} nights:** ${total_housing_cost:.2f}")
+                            housing_cost = total_housing_cost
 
-           
-
-                       
-                    # Format event details
-                    # Checking for events are not available
-                    if len(trip_details) > 0 and len(trip_details[0]) >= 4:
+                    if len(trip_details[0]) >= 4:
                         event_name = trip_details[0][2]
-                        event_cost = float(trip_details[0][3])
-                        st.markdown("### 🎭 Event")
+                        try:
+                            event_cost = float(trip_details[0][3])
+                        except ValueError:
+                            event_cost = -1
 
+                        st.markdown("### 🎭 Event")
                         if event_cost < 0 or event_name.strip() == "":
                             st.markdown("**Name:** No event information available.")
                             st.markdown("**Price:** Price not available")
                             st.markdown("**Total:** N/A")
-                            event_cost = 0  # Avoid affecting total trip cost
+                            event_cost = 0
                         else:
                             total_event_cost = event_cost * vacationers
                             st.markdown(f"**Name:** {event_name}")
@@ -133,50 +125,41 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
                             st.markdown(f"**Total for {vacationers} people:** ${total_event_cost:.2f}")
 
                 with col2:
-                    # Format flight details
                     st.markdown("### ✈️ Flights")
+                    flight_cost = 0.0
+                    try:
+                        if len(trip_details) > 1 and len(trip_details[1]) >= 3:
+                            outbound = trip_details[1]
+                            st.markdown("**Outbound:**")
+                            st.markdown(f"• Airline: {outbound[0]}")
+                            st.markdown(f"• Date: {outbound[1]}")
+                            st.markdown(f"• Price: ${outbound[2]}")
 
-                    # Departure flight
-                    if len(trip_details) > 1 and len(trip_details[1]) >= 3:
-                        outbound = trip_details[1]
-                        st.markdown("**Outbound:**")
-                        st.markdown(f"• Airline: {outbound[0]}")
-                        st.markdown(f"• Date: {outbound[1]}")
-                        st.markdown(f"• Price: ${outbound[2]}")
+                        if len(trip_details) > 2 and len(trip_details[2]) >= 3:
+                            return_flight = trip_details[2]
+                            st.markdown("**Return:**")
+                            st.markdown(f"• Airline: {return_flight[0]}")
+                            st.markdown(f"• Date: {return_flight[1]}")
+                            st.markdown(f"• Price: ${return_flight[2]}")
 
-                    # Return flight
-                    if len(trip_details) > 2 and len(trip_details[2]) >= 3:
-                        return_flight = trip_details[2]
-                        st.markdown("**Return:**")
-                        st.markdown(f"• Airline: {return_flight[0]}")
-                        st.markdown(f"• Date: {return_flight[1]}")
-                        st.markdown(f"• Price: ${return_flight[2]}")
-
-                    # Calculate and display total flight cost
-                    if len(trip_details) > 2:
-                        flight_cost = (float(trip_details[1][2]) + float(trip_details[2][2])) * vacationers
+                        outbound_price = float(trip_details[1][2]) if trip_details[1][2].strip() != "" else 0.0
+                        return_price = float(trip_details[2][2]) if trip_details[2][2].strip() != "" else 0.0
+                        flight_cost = (outbound_price + return_price) * vacationers
                         st.markdown(f"**Total flight cost for {vacationers} people:** ${flight_cost:.2f}")
+                    except (IndexError, ValueError):
+                        st.markdown("**Total flight cost:** Price not available")
 
-                # Calculate and display total trip cost
                 st.markdown("### 💰 Total Cost Breakdown")
                 try:
-                    housing_cost = float(trip_details[0][1]) * trip_days
-
-                    # update this the event_cost
-                    event_cost = float(trip_details[0][3])
-                    event_cost = 0 if event_cost < 0 else event_cost 
-                    flight_cost = (float(trip_details[1][2]) + float(trip_details[2][2])) * vacationers if len(trip_details) > 2 else 0
-
+                    event_cost = 0 if 'event_cost' not in locals() else event_cost
                     total_cost = housing_cost + event_cost + flight_cost
 
-                    # Create a cost breakdown using columns
                     cost_col1, cost_col2, cost_col3, cost_col4 = st.columns(4)
                     cost_col1.metric("Accommodation", f"${housing_cost:.2f}")
                     cost_col2.metric("Events", f"${event_cost:.2f}")
                     cost_col3.metric("Flights", f"${flight_cost:.2f}")
                     cost_col4.metric("Total", f"${total_cost:.2f}")
 
-                    # Budget comparison progress bar
                     if budget > 0:
                         budget_percentage = min(total_cost / budget * 100, 100)
                         st.progress(budget_percentage / 100)
@@ -190,7 +173,6 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
                 except (IndexError, ValueError) as e:
                     st.warning(f"Unable to calculate complete cost breakdown: {e}")
 
-                # Option to view raw data
                 with st.expander("View raw trip details"):
                     for i, detail in enumerate(trip_details):
                         if i == 0:
