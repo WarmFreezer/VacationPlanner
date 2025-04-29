@@ -113,17 +113,24 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
 
            
 
-                    
+                       
                     # Format event details
+                    # Checking for events are not available
                     if len(trip_details) > 0 and len(trip_details[0]) >= 4:
                         event_name = trip_details[0][2]
                         event_cost = float(trip_details[0][3])
-                        total_event_cost = event_cost * vacationers
-
                         st.markdown("### 🎭 Event")
-                        st.markdown(f"**Name:** {event_name}")
-                        st.markdown(f"**Price:** ${event_cost}/person")
-                        st.markdown(f"**Total for {vacationers} people:** ${total_event_cost:.2f}")
+
+                        if event_cost < 0 or event_name.strip() == "":
+                            st.markdown("**Name:** No event information available.")
+                            st.markdown("**Price:** Price not available")
+                            st.markdown("**Total:** N/A")
+                            event_cost = 0  # Avoid affecting total trip cost
+                        else:
+                            total_event_cost = event_cost * vacationers
+                            st.markdown(f"**Name:** {event_name}")
+                            st.markdown(f"**Price:** ${event_cost}/person")
+                            st.markdown(f"**Total for {vacationers} people:** ${total_event_cost:.2f}")
 
                 with col2:
                     # Format flight details
@@ -154,7 +161,10 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
                 st.markdown("### 💰 Total Cost Breakdown")
                 try:
                     housing_cost = float(trip_details[0][1]) * trip_days
-                    event_cost = float(trip_details[0][3]) * vacationers if len(trip_details[0]) >= 4 else 0
+
+                    # update this the event_cost
+                    event_cost = float(trip_details[0][3])
+                    event_cost = 0 if event_cost < 0 else event_cost 
                     flight_cost = (float(trip_details[1][2]) + float(trip_details[2][2])) * vacationers if len(trip_details) > 2 else 0
 
                     total_cost = housing_cost + event_cost + flight_cost
