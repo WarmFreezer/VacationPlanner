@@ -95,15 +95,25 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
 
                 with col1:
                     # Format accommodation details
+                    # new code replacing the -1 place holder:
                     if len(trip_details) > 0 and len(trip_details[0]) >= 2:
                         housing = trip_details[0]
-                        total_housing_cost = float(housing[1]) * trip_days
-
                         st.markdown("### 🏠 Accommodation")
+
+                    if float(housing[1])< 0 or housing[0].strip()== "":
+                        st.markdown("**Name:** Sorry, no housing available for this destination.")
+                        st.markdown("**Price:** Price not available")
+                        st.markdown("**Total:** N/A")
+                        housing_cost = 0  # For total cost calc
+                    else:
+                        total_housing_cost = float(housing[1]) * trip_days
                         st.markdown(f"**Name:** {housing[0]}")
                         st.markdown(f"**Price:** ${housing[1]}/night")
                         st.markdown(f"**Total for {trip_days} nights:** ${total_housing_cost:.2f}")
 
+           
+
+                    
                     # Format event details
                     if len(trip_details) > 0 and len(trip_details[0]) >= 4:
                         event_name = trip_details[0][2]
