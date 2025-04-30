@@ -53,22 +53,22 @@ class TripManager:
         #https://www.eventbrite.com/d/united-states--florida/all-events/?page=1&start_date=2025-04-27&end_date=2025-05-03
         eventsUrl = "https://www.eventbrite.com/d/united-states--" + self.destinationState +"/all-events/?page=1&start_date=" + dYear + "-" + dMonth + "-" + dDay + "&end_date=" + rYear + "-" + rMonth + "-" + rDay #Current Eventbrite URL
 
+        #Example flights URL
+        #https://skiplagged.com/flights/louisville/new-york/2025-05-16/2025-05-18
+        flightsUrl = "https://skiplagged.com/flights/" + self.departure + "/" + self.destinationCity + "/" + dYear + "-" + dMonth + "-" + dDay + "/" + rYear + "-" + rMonth + "-" + rDay
+
         search = WebSearch() #New webSearch obj
         search.GetHousing(housingUrl) #Search this url for housing
         search.GetEvents(eventsUrl) #Search this url for events
         self.vacationData = search.GetVacationData() #Get vacationData objects in a list from the search obj
 
-        #Iterates through the price and names list to create VacationData objects
-        index = 0 
-        while(index < len(self.vacationData)): 
-            self.flightData.append(FlightData("Spirit", self.destinationState, "05-16-2025", 100)) #remove
-            self.flightData.append(FlightData("Spirit", self.destinationState, "05-23-2025", 100)) #remove
-            index += 1
+        flightsSearch = FlightScraper(flightsUrl)
+        self.flightData = flightsSearch.getFlight();
 
         #Iterates through the vacationData and flight lists to create Trip objects
         index = 0
         while (index < len(self.vacationData)): #Parse through vacationData
-            trip = Trip(self.vacationData[index], self.flightData[2 * index], self.flightData[2 * index + 1]) #Define a trip object to be tested
+            trip = Trip(self.vacationData[index], self.flightData[0]) #Define a trip object to be tested
             
             dateOfDeparture = date(int(dYear), int(dMonth), int(dDay))
             dateOfReturn = date(int(rYear), int(rMonth), int(rDay))
@@ -80,7 +80,7 @@ class TripManager:
             index += 1 #Goto next item in list
 
         if (len(self.tripList) == 0): #If no trips fit in budget
-            self.tripList.append(Trip(VacationData(), FlightData(), FlightData())) #Add default trip to represent a search error
+            self.tripList.append(Trip(VacationData(), FlightData())) #Add default trip to represent a search error
 
         return self.tripList
 
