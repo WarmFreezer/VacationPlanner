@@ -59,24 +59,25 @@ class FlightScraper:
             self.airline = fl.text.strip()
             #print("Airline is: ", self.airline)
 
-        #This gets the first price on the page and formats it to a float. The reason its not directly accessed like the others is because
-        #it has a malformed identifier and as such couldn't be directly accessed.
-        for span in soup.find_all('span'):
-            text = span.text.strip()
-            if "$" in text:
-                print("Price found:", text)
-                self.price = float(text[1:])
-                break
+            #This gets the first price on the page and formats it to a float. The reason its not directly accessed like the others is because
+            #it has a malformed identifier and as such couldn't be directly accessed.
+            for span in soup.find_all('span'):
+                text = span.text.strip()
+                if "$" in text:
+                    print("Price found:", text)
+                    self.price = float(text[1:])
+                    break
         
-        #This gets all the times on the page and parses the first two (the top results)
-        times = soup.find_all('div', class_="trip-path-point-time")
-        if len(times) >= 2:
-            self.dt = times[0].text.strip()
-            #print("Depart time: ", self.dt)
-            self.rt = times[1].text.strip()
-            #print("Return time: ", self.rt)
-        #else:
-            #print("There are no times")
+            #This gets all the times on the page and parses the first two (the top results)
+            times = soup.find_all('div', class_="trip-path-point-time")
+            if len(times) >= 2:
+                self.dt = times[0].text.strip()
+                #print("Depart time: ", self.dt)
+                self.rt = times[1].text.strip()
+                #print("Return time: ", self.rt)
+            #else:
+                #print("There are no times")
+
 
     def getFlight(self) -> FlightData:
         return FlightData(self.airline, self.dt, self.rt, self.price)
