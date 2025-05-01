@@ -21,7 +21,16 @@ except ValueError:
 # --- Sidebar: Trip Information ---
 st.sidebar.header("2. Trip Info")
 
-states = ["Florida", "California", "Texas", "Kentucky", "New York"]
+states = [
+    "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", 
+    "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", 
+    "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", 
+    "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", 
+    "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", 
+    "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", 
+    "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", 
+    "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
+]
 
 departure: str = st.sidebar.selectbox("Departure State", states)
 destinationState: str = st.sidebar.selectbox("Destination State", states)
@@ -67,7 +76,8 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
             returnDate=returnDate,
             vacationers=vacationers
         )
-
+        #user_trips=[]
+        
         user_trips = user_trip_manager.MainSearch()
 
     placeholder.success("✅ Trip planning complete! Scroll down to see your results.")
