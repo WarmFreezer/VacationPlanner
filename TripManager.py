@@ -55,7 +55,7 @@ class TripManager:
 
         #Example flights URL
         #https://skiplagged.com/flights/louisville/new-york/2025-05-16/2025-05-18
-        flightsUrl = "https://skiplagged.com/flights/" + self.departure + "/" + self.destinationCity + "/" + dYear + "-" + dMonth + "-" + dDay + "/" + rYear + "-" + rMonth + "-" + rDay
+        flightsUrl = "https://skiplagged.com/flights/" + self.departure.lower() + "/" + self.destinationCity.lower() + "/" + dYear + "-" + dMonth + "-" + dDay + "/" + rYear + "-" + rMonth + "-" + rDay
 
         search = WebSearch() #New webSearch obj
         search.GetHousing(housingUrl) #Search this url for housing
@@ -68,7 +68,7 @@ class TripManager:
         #Iterates through the vacationData and flight lists to create Trip objects
         index = 0
         while (index < len(self.vacationData)): #Parse through vacationData
-            trip = Trip(self.vacationData[index], self.flightData[0]) #Define a trip object to be tested
+            trip = Trip(self.vacationData[index], self.flightData) #Define a trip object to be tested
             
             dateOfDeparture = date(int(dYear), int(dMonth), int(dDay))
             dateOfReturn = date(int(rYear), int(rMonth), int(rDay))

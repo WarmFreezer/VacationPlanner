@@ -7,7 +7,7 @@ from FlightData import FlightData
 class Trip:
     def __init__(self, vacationData, flightData): 
         self.vacationData = vacationData
-        self.flightData1 = flightData
+        self.flightData = flightData
     
     def ToString(self):
         string = []
