@@ -41,7 +41,7 @@ class FlightScraper:
 
         #This scrolls to the bottom to ensure the whole page is loaded. Our results are at the top so mostly not needed but it doesn't hurt to make sure
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(5) #The program will wait for a few seconds to ensure everything loads
+        time.sleep(3) #The program will wait for a few seconds to ensure everything loads
         
         #This parses most of the html document into a string.
         html = driver.find_element(By.XPATH, '/html/body/section').get_attribute("outerHTML")
@@ -65,7 +65,7 @@ class FlightScraper:
             text = span.text.strip()
             if "$" in text:
                 print("Price found:", text)
-                #self.price = float(text[1:])
+                self.price = float(text[1:])
                 break
         
         #This gets all the times on the page and parses the first two (the top results)

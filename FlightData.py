@@ -16,7 +16,7 @@ class FlightData: #Objects of this type contain flight information for other cla
         string.append(self.airline)
         string.append(self.d_time)
         string.append(self.r_time)
-        string.append("$" + str(self.price))
+        string.append(str(self.price))
         return string
 
 
