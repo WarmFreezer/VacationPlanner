@@ -54,7 +54,7 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
     with st.spinner("🔍 Planning your perfect trip..."):
         placeholder.info("🔄 Please wait, gathering trip data and calculating estimates...")
 
-    with st.spinner("🔄 Hold on taking a vacation..."):
+    with st.spinner("🔄 Gathering information may take longer due to being on a vacation..."):
         placeholder.info("Please wait, gathering trip data and calculating estimates...")
 
         # Use dynamic user inputs to create TripManager
@@ -132,22 +132,16 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
                             outbound = trip_details[1]
                             st.markdown("**Outbound:**")
                             st.markdown(f"• Airline: {outbound[0]}")
-                            st.markdown(f"• Date: {departureDate}")
-                            st.markdown(f"• Price: ${outbound[3]}")
+                            st.markdown(f"• Depart Date: {departureDate}")
+                            st.markdown(f"• Return Date: {returnDate}")
+                            st.markdown(f"• Flight Price: ${outbound[3]}")
+                      
 
-                        if len(trip_details) > 2 and len(trip_details[2]) >= 3:
-                            return_flight = trip_details[2]
-                            st.markdown("**Return:**")
-                            st.markdown(f"• Airline: {return_flight[0]}")
-                            st.markdown(f"• Date: {departureDate}")
-                            st.markdown(f"• Price: ${return_flight[3]}")
-
-                        outbound_price = float(trip_details[1][2]) if trip_details[1][2].strip() != "" else 0.0
-                        return_price = float(trip_details[2][2]) if trip_details[2][2].strip() != "" else 0.0
+                        outbound_price = float(trip_details[1][2]) if str(trip_details[1][2]).strip() != "" else 0.0
+                        return_price = float(trip_details[2][2]) if str(trip_details[2][2]).strip() != "" else 0.0
                         flight_cost = (outbound_price + return_price) * vacationers
-                        st.markdown(f"**Total flight cost for {vacationers} people:** ${flight_cost:.2f}")
                     except (IndexError, ValueError):
-                        st.markdown("**Total flight cost:** Price not available")
+                        pass  # no flight cost shown
 
                 st.markdown("### 💰 Total Cost Breakdown")
                 try:
