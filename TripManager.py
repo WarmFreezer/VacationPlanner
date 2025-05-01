@@ -67,6 +67,7 @@ class TripManager:
 
         #Iterates through the vacationData and flight lists to create Trip objects
         index = 0
+        self.tripList.clear()
         while (index < len(self.vacationData)): #Parse through vacationData
             trip = Trip(self.vacationData[index], self.flightData) #Define a trip object to be tested
             
