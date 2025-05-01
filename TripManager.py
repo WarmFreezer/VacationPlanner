@@ -76,8 +76,8 @@ class TripManager:
 
             housingCost = float(trip.ToString()[0][1]) * abs((dateOfReturn - dateOfDeparture).days)
             eventCost = float(trip.ToString()[0][3])
-            if (housingCost + eventCost * int(self.vacationers) < int(self.budget) / 2): #if housingCost + eventCost * vacationers < budget    
-                self.tripList.append(trip) #Add to trip list
+
+            self.tripList.append(trip) #Add to trip list
             index += 1 #Goto next item in list
 
         if (len(self.tripList) == 0): #If no trips fit in budget
