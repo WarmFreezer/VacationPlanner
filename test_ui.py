@@ -132,14 +132,14 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
                             outbound = trip_details[1]
                             st.markdown("**Outbound:**")
                             st.markdown(f"• Airline: {outbound[0]}")
-                            st.markdown(f"• Date: {outbound[1]}")
+                            st.markdown(f"• Date: {departureDate}")
                             st.markdown(f"• Price: ${outbound[3]}")
 
                         if len(trip_details) > 2 and len(trip_details[2]) >= 3:
                             return_flight = trip_details[2]
                             st.markdown("**Return:**")
                             st.markdown(f"• Airline: {return_flight[0]}")
-                            st.markdown(f"• Date: {return_flight[1]}")
+                            st.markdown(f"• Date: {departureDate}")
                             st.markdown(f"• Price: ${return_flight[3]}")
 
                         outbound_price = float(trip_details[1][2]) if trip_details[1][2].strip() != "" else 0.0
