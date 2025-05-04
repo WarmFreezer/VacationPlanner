@@ -173,6 +173,7 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
                 st.markdown("### 💰 Total Cost Breakdown")
                 try:
                     event_cost = 0 if 'event_cost' not in locals() else event_cost
+                    flight_cost = float(outbound[3]);
                     total_cost = housing_cost + event_cost + flight_cost
 
                     # Display cost breakdown 
