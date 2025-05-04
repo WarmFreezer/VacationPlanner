@@ -1,24 +1,27 @@
-﻿import streamlit as st
-from datetime import date
-from TripManager import TripManager
+﻿#Author: Savanna Booten 
 
-# --- Page Title ---
+import streamlit as st  # streamlit is the main library for the web app
+from datetime import date # date is used for date manipulation
+from TripManager import TripManager # TripManager is a class that handles the trip planning logic
+
+# Page Title
 st.title("😊 Vacation Budget Planner 📖")
 
-# --- Sidebar: Budget Setup ---
+# Sidebar: Budget Setup
 st.sidebar.header("1. Budget Setup")
 
 # User Inputs
 budget: int = 0
 budget_input = st.sidebar.text_input("Enter your total vacation budget ($)", placeholder="e.g., 2000")
 
+# Validate budget input
 try:
     budget = float(budget_input) if budget_input else 0.0
 except ValueError:
     budget = 0.0
     st.sidebar.error("❗ Please enter a valid number for the budget.")
 
-# --- Sidebar: Trip Information ---
+# Sidebar: Trip Information 
 st.sidebar.header("2. Trip Info")
 
 states = [
@@ -32,24 +35,29 @@ states = [
     "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
 ]
 
+# Trip Information Inputs
 departure: str = st.sidebar.selectbox("Departure State", states)
 destinationState: str = st.sidebar.selectbox("Destination State", states)
 destinationCity: str = st.sidebar.text_input("Destination City", placeholder="e.g., Miami")
 
+# Dates input 
 departureDate_obj = st.sidebar.date_input("Departure Date", min_value=date.today())
 returnDate_obj = st.sidebar.date_input("Return Date", min_value=departureDate_obj)
 
+# format dates to MM/DD/YYYY
 departureDate: str = departureDate_obj.strftime("%m/%d/%Y")
 returnDate: str = returnDate_obj.strftime("%m/%d/%Y")
 
+# number of vacationers
 vacationers: int = int(st.sidebar.number_input("Number of Vacationers", min_value=1, step=1))
 
-# --- Validate and Show Summary on Main Page ---
+# Validate and Show Summary on Main Page 
 if st.sidebar.button("Validate Vacation Plan") and budget > 0:
     st.header("📊 Vacation Plan Summary")
 
     st.success("✅ Budget and trip information submitted successfully!")
 
+    # Displays the users inputs
     st.markdown(f"""
     **📍 Departure State:** {departure}  
     **🏓️ Destination:** {destinationCity}, {destinationState}  
@@ -60,6 +68,7 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
 
     placeholder = st.empty()
 
+    # Show loading spinner while gathering information 
     with st.spinner("🔍 Planning your perfect trip..."):
         placeholder.info("🔄 Please wait, gathering trip data and calculating estimates...")
 
@@ -76,8 +85,8 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
             returnDate=returnDate,
             vacationers=vacationers
         )
-        #user_trips=[]
-        
+      
+        # Trip search 
         user_trips = user_trip_manager.MainSearch()
 
     placeholder.success("✅ Trip planning complete! Scroll down to see your results.")
@@ -91,6 +100,7 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
 
         trip_tabs = st.tabs([f"Trip Option {i+1}" for i in range(min(len(user_trips), 99))])
 
+        # Display each trip option in a separate tab 
         for i, (tab, trip) in enumerate(zip(trip_tabs, user_trips[:99])):
             with tab:
                 trip_details = trip.ToString()
@@ -98,6 +108,7 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
 
                 col1, col2 = st.columns([3, 2])
 
+                # Accommodation and Event details
                 with col1:
                     if len(trip_details) > 0 and len(trip_details[0]) >= 2:
                         housing = trip_details[0]
@@ -115,6 +126,8 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
                             st.markdown(f"**Total for {trip_days} nights:** ${total_housing_cost:.2f}")
                             housing_cost = total_housing_cost
 
+
+                    # Event details 
                     if len(trip_details[0]) >= 4:
                         event_name = trip_details[0][2]
                         try:
@@ -133,7 +146,8 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
                             st.markdown(f"**Name:** {event_name}")
                             st.markdown(f"**Price:** ${event_cost}/person")
                             st.markdown(f"**Total for {vacationers} people:** ${total_event_cost:.2f}")
-
+                
+               # Flight details 
                 with col2:
                     st.markdown("### ✈️ Flights")
                     flight_cost = 0.0
@@ -161,16 +175,19 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
                     event_cost = 0 if 'event_cost' not in locals() else event_cost
                     total_cost = housing_cost + event_cost + flight_cost
 
+                    # Display cost breakdown 
                     cost_col1, cost_col2, cost_col3, cost_col4 = st.columns(4)
                     cost_col1.metric("Accommodation", f"${housing_cost:.2f}")
                     cost_col2.metric("Events", f"${event_cost:.2f}")
                     cost_col3.metric("Flights", f"${flight_cost:.2f}")
                     cost_col4.metric("Total", f"${total_cost:.2f}")
 
+                    # Budget bar 
                     if budget > 0:
                         budget_percentage = min(total_cost / budget * 100, 100)
                         st.progress(budget_percentage / 100)
 
+                    # budget remaining 
                     remaining_budget = budget - total_cost
                     if remaining_budget >= 0:
                         st.success(f"✅ This trip fits within your budget with ${remaining_budget:.2f} to spare!")
@@ -180,6 +197,7 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
                 except (IndexError, ValueError) as e:
                     st.warning(f"Unable to calculate complete cost breakdown: {e}")
 
+                # Show raw trip details
                 with st.expander("View raw trip details"):
                     for i, detail in enumerate(trip_details):
                         if i == 0:
