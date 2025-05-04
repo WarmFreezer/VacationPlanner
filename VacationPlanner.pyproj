@@ -28,7 +28,7 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="test_ui.py">
+    <Compile Include="savecation.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Trip.py" />
