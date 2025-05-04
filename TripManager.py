@@ -74,9 +74,6 @@ class TripManager:
             dateOfDeparture = date(int(dYear), int(dMonth), int(dDay))
             dateOfReturn = date(int(rYear), int(rMonth), int(rDay))
 
-            housingCost = float(trip.ToString()[0][1]) * abs((dateOfReturn - dateOfDeparture).days)
-            eventCost = float(trip.ToString()[0][3])
-
             self.tripList.append(trip) #Add to trip list
             index += 1 #Goto next item in list
 

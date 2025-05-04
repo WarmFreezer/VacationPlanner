@@ -155,7 +155,7 @@ class WebSearch:
         while (index < len(names)): #Creates a VacationData object for each index of the names list
             try:
                 #Create a VacationData object for each item in the 4 lists
-                vacationData.append(VacationData(names[index], prices[index], eventNames[index], eventPrices[index]))
+                vacationData.append(VacationData(names[index], str(prices[index]), eventNames[index], eventPrices[index]))
             except Exception:
                 print("No results for event lists")
             index += 1
