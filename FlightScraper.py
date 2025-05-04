@@ -39,44 +39,48 @@ class FlightScraper:
         driver = webdriver.Chrome(options=chrome_options)
         driver.get(url) #This opens the webbrowser
 
-        #This scrolls to the bottom to ensure the whole page is loaded. Our results are at the top so mostly not needed but it doesn't hurt to make sure
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(5) #The program will wait for a few seconds to ensure everything loads
+        if (driver.current_url == url):
+            #This scrolls to the bottom to ensure the whole page is loaded. Our results are at the top so mostly not needed but it doesn't hurt to make sure
+            driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            time.sleep(5) #The program will wait for a few seconds to ensure everything loads
         
-        #This parses most of the html document into a string.
-        html = driver.find_element(By.XPATH, '/html/body/section').get_attribute("outerHTML")
-        soup = bs4.BeautifulSoup(html, 'html.parser')
+            #This parses most of the html document into a string.
+            html = driver.find_element(By.XPATH, '/html/body/section').get_attribute("outerHTML")
+            soup = bs4.BeautifulSoup(html, 'html.parser')
 
-        #At this point, the information we need is in the parse html document so we close the browser
-        driver.quit()
+            #At this point, the information we need is in the parse html document so we close the browser
+            driver.quit()
 
-        #print(soup.prettify()) -- This was used for debugging purposes
+            #print(soup.prettify()) -- This was used for debugging purposes
 
-        #This gets the airline and assigns it to the airline variable. It uses the top entry since by default the page sorts by cheapest at the top.
-        #Since we're a budget planner its best to get the cheapest option for our planner.
-        fl = soup.find('span', class_="airlines airlines-lg hide-small")
-        if fl:
-            self.airline = fl.text.strip()
-            #print("Airline is: ", self.airline)
+            #This gets the airline and assigns it to the airline variable. It uses the top entry since by default the page sorts by cheapest at the top.
+            #Since we're a budget planner its best to get the cheapest option for our planner.
+            fl = soup.find('span', class_="airlines airlines-lg hide-small")
+            if fl:
+                self.airline = fl.text.strip()
+                #print("Airline is: ", self.airline)
 
-        #This gets the first price on the page and formats it to a float. The reason its not directly accessed like the others is because
-        #it has a malformed identifier and as such couldn't be directly accessed.
-        for span in soup.find_all('span'):
-            text = span.text.strip()
-            if "$" in text:
-                print("Price found:", text)
-                self.price = float(text[1:])
-                break
+                #This gets the first price on the page and formats it to a float. The reason its not directly accessed like the others is because
+                #it has a malformed identifier and as such couldn't be directly accessed.
+                for span in soup.find_all('span'):
+                    text = span.text.strip()
+                    if "$" in text:
+                        print("Price found:", text)
+                        self.price = float(text[1:].replace(",",""))
+                        break
         
-        #This gets all the times on the page and parses the first two (the top results)
-        times = soup.find_all('div', class_="trip-path-point-time")
-        if len(times) >= 2:
-            self.dt = times[0].text.strip()
-            #print("Depart time: ", self.dt)
-            self.rt = times[1].text.strip()
-            #print("Return time: ", self.rt)
-        #else:
-            #print("There are no times")
+                #This gets all the times on the page and parses the first two (the top results)
+                times = soup.find_all('div', class_="trip-path-point-time")
+                if len(times) >= 2:
+                    self.dt = times[0].text.strip()
+                    #print("Depart time: ", self.dt)
+                    self.rt = times[1].text.strip()
+                    #print("Return time: ", self.rt)
+                #else:
+                    #print("There are no times")
+            else:
+                driver.quit()
+
 
     def getFlight(self) -> FlightData:
         return FlightData(self.airline, self.dt, self.rt, self.price)

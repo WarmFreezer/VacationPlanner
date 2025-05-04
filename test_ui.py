@@ -91,7 +91,7 @@ if st.sidebar.button("Validate Vacation Plan") and budget > 0:
 
         trip_tabs = st.tabs([f"Trip Option {i+1}" for i in range(min(len(user_trips), 99))])
 
-        for i, (tab, trip) in enumerate(zip(trip_tabs, user_trips[:10])):
+        for i, (tab, trip) in enumerate(zip(trip_tabs, user_trips[:99])):
             with tab:
                 trip_details = trip.ToString()
                 trip_days = (returnDate_obj - departureDate_obj).days
